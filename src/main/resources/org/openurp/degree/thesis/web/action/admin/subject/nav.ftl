@@ -1,0 +1,6 @@
+[#ftl]
+  [@b.nav class="nav-tabs nav-tabs-compact"]
+    [@b.navitem href="!index"]题目管理[/@]
+    [@b.navitem href="!teachers?emptyOnly=0"]所有教师[/@]
+    [@b.navitem href="!teachers?emptyOnly=1"]未添加题目教师[/@]
+  [/@]

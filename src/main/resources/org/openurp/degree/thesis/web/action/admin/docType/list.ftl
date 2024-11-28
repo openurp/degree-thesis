@@ -1,0 +1,21 @@
+[#ftl]
+[@b.head/]
+[@b.grid items=thesisDocTypes var="thesisDocType"]
+  [@b.gridbar]
+    bar.addItem("${b.text("action.new")}",action.add());
+    bar.addItem("${b.text("action.modify")}",action.edit());
+    bar.addItem("${b.text("action.delete")}",action.remove("确认删除?"));
+  [/@]
+  [@b.row]
+    [@b.boxcol /]
+    [@b.col width="6%" property="idx" title="顺序"]${thesisDocType.idx}[/@]
+    [@b.col width="10%" property="code" title="代码"]${thesisDocType.code}[/@]
+    [@b.col width="15%" property="name" title="名称"][@b.a href="!info?id=${thesisDocType.id}"]${thesisDocType.name}[/@][/@]
+    [@b.col width="15%" property="stage" title="阶段"]${thesisDocType.stage}[/@]
+    [@b.col width="10%" property="maxSize" title="文件大小上限(MB)"]${thesisDocType.maxSize}MB[/@]
+    [@b.col width="10%" property="extensions" title="允许的文件类型"]${thesisDocType.extensions}[/@]
+    [@b.col property="remark" title="备注"]${thesisDocType.remark!}[/@]
+    [@b.col width="15%" property="beginOn" title="有效期"]${thesisDocType.beginOn!}~${thesisDocType.endOn!}[/@]
+  [/@]
+[/@]
+[@b.foot/]

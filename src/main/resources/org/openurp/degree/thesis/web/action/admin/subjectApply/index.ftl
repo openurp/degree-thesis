@@ -1,0 +1,8 @@
+[@b.head/]
+  [@b.tabs class="nav-tabs nav-tabs-compact"]
+    [@b.tab href="!search?round=99" label="最终情况"/]
+    [@b.tab href="!search?round=1" label="初选情况"/]
+    [@b.tab href="!search?round=2" label="补选情况"/]
+    [@b.tab href="!shuffleSetting" label="选题抽签"/]
+  [/@]
+[@b.foot/]

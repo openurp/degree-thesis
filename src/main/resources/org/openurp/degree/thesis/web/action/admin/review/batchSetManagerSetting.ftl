@@ -1,0 +1,28 @@
+[@b.head/]
+[@b.toolbar title='批量设置论文评阅负责人']
+[/@]
+[@b.form name="reviewForm" action="!batchSetManager" theme="list"]
+  [@b.select label="评阅负责人" name="manager.id" items=managers  option=r"${item.description}" /]
+  [@b.formfoot]
+    [#list thesisReviews as thesisReview]
+    <input type="hidden" value="${thesisReview.id}" name="thesisReview.id"/>
+    [/#list]
+    [@b.submit value="保存"/]
+  [/@]
+[/@]
+
+[@b.grid items=thesisReviews?sort_by(["writer","std","code"]) var="thesisReview" sortable="false"]
+  [@b.row]
+    [@b.col property="writer.std.code"  title="学号" width="100px"/]
+    [@b.col property="writer.std.name"  title="姓名" width="130px"/]
+    [@b.col property="writer.std.state.major.name"  title="专业 方向 班级" ]
+      ${thesisReview.writer.std.state.major.name} ${(thesisReview.writer.std.state.direction.name)!} ${(thesisReview.writer.std.state.squad.name)!}
+    [/@]
+    [@b.col property="writer.thesisTitle" title="题目"/]
+    [@b.col property="writer.advisor.teacher.name" title="指导老师" width="100px"/]
+    [@b.col property="crossReviewManager.name" title="评阅负责人" width="100px"/]
+    [@b.col property="crossReviewer.name" title="评阅教师" width="100px"/]
+  [/@]
+[/@]
+
+[@b.foot/]

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<mvc>
+  <profile name="openurp-degree-thesis-webapp" package="org.openurp.degree.thesis.web.action">
+    <url path="/" suffix=""  style="seo" />
+    <interceptors>
+      <interceptor name="web.Interceptor.hibernate"/>
+      <interceptor name="web.Interceptor.security"/>
+     </interceptors>
+  </profile>
+  <static>
+    <bundle name="qrcodejs" version="1c78ccd"/>
+    <bundle name="pdfjs-dist" version="4.2.67"/>
+  </static>
+</mvc>

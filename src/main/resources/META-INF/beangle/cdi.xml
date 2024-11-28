@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<cdi>
+  <container>
+    <module class="org.openurp.degree.thesis.service.DefaultModule"/>
+    <module class="org.beangle.serializer.text.DefaultModule"/>
+    <module class="org.beangle.serializer.json.DefaultModule"/>
+    <module class="org.openurp.degree.thesis.web.action.admin.DefaultModule"/>
+    <module class="org.openurp.degree.thesis.web.action.advisor.DefaultModule"/>
+    <module class="org.openurp.degree.thesis.web.action.director.DefaultModule"/>
+    <module class="org.openurp.degree.thesis.web.action.std.DefaultModule"/>
+    <module class="org.openurp.degree.thesis.web.action.common.DefaultModule"/>
+    <module class="org.openurp.starter.web.ProjectModule"/>
+  </container>
+</cdi>

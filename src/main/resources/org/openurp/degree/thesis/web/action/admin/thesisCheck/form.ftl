@@ -1,0 +1,45 @@
+[@b.head/]
+[@b.toolbar title="修改学生论文信息"]bar.addBack();[/@]
+<style>
+  #thesisCheckForm fieldset.listset li > label.title{
+    min-width:150px;
+  }
+</style>
+[@b.form name="thesisCheckForm" action=b.rest.save(thesisCheck) theme="list"]
+  [@b.field label="学号"]${thesisCheck.writer.std.code}[/@]
+  [@b.textfield label="姓名" name="thesisCheck.writerName" value=thesisCheck.writerName/]
+  [@b.field label="学位授予单位"]${thesisCheck.writer.std.project.school.code} ${thesisCheck.writer.std.project.school.name}[/@]
+  [@b.textfield label="学士学位专业代码" name="thesisCheck.degreeMajorCode" value=thesisCheck.degreeMajorCode! /]
+  [@b.textfield label="学士学位专业名称" name="thesisCheck.degreeMajorName" value=thesisCheck.degreeMajorName! /]
+  [@b.textfield label="证书专业名称" name="thesisCheck.certMajorName" value=thesisCheck.certMajorName! /]
+  [@b.startend label="入学~毕业" format="yyyy-MM" start=thesisCheck.enrollOn! end=thesisCheck.graduateOn name="thesisCheck.enrollOn,thesisCheck.graduateOn"/]
+  [@b.radios label="是否主辅修学位"  name="thesisCheck.majorMinorDegree" value=thesisCheck.majorMinorDegree! items="1:common.yes,0:common.no" /]
+  [@b.radios label="是否双学士学位"  name="thesisCheck.dualDegree" value=thesisCheck.dualDegree! items="1:common.yes,0:common.no" /]
+  [@b.radios label="是否联合学位"  name="thesisCheck.jointDegree" value=thesisCheck.jointDegree! items="1:common.yes,0:common.no" /]
+  [@b.textfield label="联合培养单位码"  name="thesisCheck.jointOrgCode" value=thesisCheck.jointOrgCode!/]
+  [@b.radios label="是否第二学位"  name="thesisCheck.secondDegree" value=thesisCheck.secondDegree items="1:common.yes,0:common.no"/]
+  [@b.radios label="是否辅修学位"  name="thesisCheck.minorDegree" value=thesisCheck.minorDegree items="1:common.yes,0:common.no" /]
+  [#assign eduTypes={'普通高等教育':'普通高等教育','来华留学':'来华留学','成人高等教育':'成人高等教育'} /]
+  [@b.radios name="thesisCheck.eduType" label="学位类型" required="true" items=eduTypes value=thesisCheck.eduType!/]
+
+  [@b.textfield label="论文题目" name="thesisCheck.title" value=thesisCheck.title!  style="width:400px"/]
+  [@b.select label="撰写语种" name="thesisCheck.language.id" items=languages value=thesisCheck.language!/]
+  [@b.textfield label="论文研究方向"  name="thesisCheck.researchField" value=thesisCheck.researchField!/]
+  [@b.textfield label="论文关键词"  name="thesisCheck.keywords" value=thesisCheck.keywords comment="关键词之间采用全角分号隔开"! style="width:400px"/]
+  [@b.textfield label="指导教师" name="thesisCheck.advisor" value=thesisCheck.advisor!/]
+  [@b.radios label="是否本专业第一届毕业生"  name="thesisCheck.firstSeason" value=thesisCheck.firstSeason! items="1:common.yes,0:common.no" /]
+  [#assign thesisTypes={'毕业论文':'毕业论文','毕业设计':'毕业设计','涉密论文':'涉密论文','无':'无'} /]
+  [@b.radios label="上传论文（设计）类型"  name="thesisCheck.thesisType" value=thesisCheck.thesisType! items=thesisTypes /]
+  [@b.textfield label="毕业生所在院系代码" name="thesisCheck.departNo" value=thesisCheck.departNo!/]
+  [@b.textfield label="毕业生所在院系名称" name="thesisCheck.departName" value=thesisCheck.departName!/]
+
+  [@b.file name="cover_file" extensions="pdf" maxSize="50M" label="选择封面"/]
+  [@b.file name="paper_file" extensions="pdf" maxSize="50M" label="选择论文"/]
+  [@b.file name="proposal_file" extensions="pdf" maxSize="20M" label="选择开题报告"/]
+  [@b.file name="defense_file" extensions="pdf" maxSize="20M" label="选择答辩评分表"/]
+  [@b.formfoot]
+    [@b.submit value="保存"/]
+  [/@]
+[/@]
+<br/><br/><br/><br/><br/><br/><br/>
+[@b.foot/]

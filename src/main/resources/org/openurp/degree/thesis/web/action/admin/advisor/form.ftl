@@ -1,0 +1,20 @@
+[@b.head/]
+[@b.toolbar title="修改指导教师信息"]bar.addBack();[/@]
+[@b.form name="newAdvisorForm" action=b.rest.save(advisor) theme="list"]
+  [@b.field label="教师"]${advisor.teacher.code} ${advisor.teacher.name} ${advisor.teacher.department.name}[/@]
+  [@b.field label="职称"]${(advisor.teacher.staff.title.name)!'无'}[/@]
+  [@b.select name="depart.id" label="指导院系" required="true" items=departs values=advisor.departs chosenMin="1" multiple="true"  style="width:300px"/]
+  [@b.select name="office.id" label="所在教研室" items=offices value=advisor.teacher.office chosenMin="1" style="width:300px"/]
+  [@b.radios label="教研室主任"  name="isDirector" value=isDirector items="1:common.yes,0:common.no" required="true"/]
+  [@b.field label="带学生上限"]${advisor.maxWriters}<span class="text-muted">&nbsp;如需更改，请联系教务处</span>[/@]
+  [@b.startend label="有效期限"
+      name="advisor.beginOn,advisor.endOn" required="true,false"
+      start=advisor.beginOn end=advisor.endOn format="date"/]
+  [@b.textfield label="手机" name="advisor.mobile" value=advisor.mobile!/]
+  [@b.email label="电子邮箱" name="advisor.email" value=advisor.email!/]
+  [@b.formfoot]
+    [@b.submit value="保存"/]
+  [/@]
+[/@]
+<br/><br/><br/><br/><br/><br/><br/>
+[@b.foot/]

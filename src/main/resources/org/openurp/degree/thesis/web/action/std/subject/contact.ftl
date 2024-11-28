@@ -1,0 +1,18 @@
+[#include "/org/openurp/degree/thesis/web/action/head.ftl"/]
+<div class="container-fluid">
+   [@b.card class="card-info card-primary card-outline" id="profile_card"]
+    [#assign title]<i class="fas fa-file-pdf"></i>请先完善您的个人联系方式，然后选题[/#assign]
+    [@b.card_header class="border-transparent" title=title ]
+    [/@]
+    [@b.card_body class="p-0"]
+      [@b.form name="profileForm" action="!saveProfile" theme="list"]
+        [@b.cellphone name="mobile" placeholder="手机" required="true" label="手机" value=writer.mobile!/]
+        [@b.email name="email" placeholder="邮箱" required="true" label="邮箱" value=writer.email!  style="width:400px"/]
+        [@b.formfoot]
+          [@b.submit value="提交"/]
+        [/@]
+      [/@]
+    [/@]
+  [/@]
+</div>
+[@b.foot/]

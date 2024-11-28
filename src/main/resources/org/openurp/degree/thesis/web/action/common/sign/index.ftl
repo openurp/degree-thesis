@@ -1,0 +1,8 @@
+[@b.head/]
+[@b.form action="!save" theme="list" onsubmit=""]
+  [@b.esign name="sign_code" label="签名" required="true"/]
+  [@b.formfoot]
+    [@b.submit/]
+  [/@]
+[/@]
+[@b.foot/]

@@ -1,0 +1,30 @@
+[@b.head/]
+  [@b.form name="advisorListForm" action="!search"]
+    [@b.grid items=advisors var="advisor" sortable="true"]
+      [@b.gridbar]
+        bar.addItem("${b.text("action.new")}",action.add());
+        bar.addItem("${b.text("action.modify")}",action.edit());
+        bar.addItem("禁用",action.multi("disable","确认禁用?"));
+        bar.addItem("${b.text("action.delete")}",action.remove("确认删除?"));
+        bar.addItem("导出",action.exportData("teacher.staff.code:工号,teacher.name:姓名,teacher.department.name:院系,teacher.office.name:教研室,mobile:联系方式,teacher.staff.title.name:职称,maxWriters:带学生上限",null,'fileName=指导老师信息'));
+      [/@]
+      [@b.row]
+        [@b.boxcol/]
+        [@b.col property="teacher.staff.code" title="工号" width="80px"/]
+        [@b.col property="teacher.name" title="姓名" width="120px"/]
+        [@b.col property="teacher.gender.name" title="性别" width="50px"/]
+        [@b.col property="teacher.department.name" title="所在院系"/]
+        [@b.col title="指导院系"]
+          [#list advisor.departs as depart]${depart.name}[#sep],[/#list]
+        [/@]
+        [@b.col title="教研室" property="teacher.office.name"/]
+        [@b.col property="mobile" title="联系方式" width="100px"]
+          [#if advisor.mobile??]<i class="fa-solid fa-phone" title="${advisor.mobile}"></i>[/#if]
+          [#if advisor.email??]<a href="mailto:${advisor.email}"><i class="fa-solid fa-envelope" title="${advisor.email}"></i></a>[/#if]
+        [/@]
+        [@b.col property="teacher.staff.title.name" title="职称" width="80px"/]
+        [@b.col property="maxWriters" title="带学生上限" width="80px"/]
+      [/@]
+    [/@]
+  [/@]
+[@b.foot/]

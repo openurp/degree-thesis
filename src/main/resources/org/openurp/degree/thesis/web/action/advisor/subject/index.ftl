@@ -1,0 +1,6 @@
+[@b.head/]
+  [@b.tabs class="nav-tabs nav-tabs-compact"]
+    [@b.tab href="!search" label="我的题目"/]
+    [@b.tab href="!others" label="其他教师题目"/]
+  [/@]
+[@b.foot/]
