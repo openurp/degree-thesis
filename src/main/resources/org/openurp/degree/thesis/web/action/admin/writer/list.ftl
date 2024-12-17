@@ -6,7 +6,7 @@
         bar.addItem("${b.text("action.modify")}",action.edit());
         bar.addItem("${b.text("action.delete")}",action.remove("确认删除?"));
         bar.addItem("导入",action.method('importForm'));
-        bar.addItem("导出",action.exportData("std.code:学号,std.name:姓名,std.gender.name:性别,std.state.grade.name:年级,std.level.name:层次,std.state.department.name:院系,std.state.major.name:专业,std.state.direction.name:专业方向,std.state.squad.name:班级,mobile:手机,advisor.teacher.code:指导教师工号,advisor.teacher.name:指导教师",null,'fileName=学生信息'));
+        bar.addItem("导出",action.exportData("std.code:学号,std.name:姓名,std.gender.name:性别,std.state.grade.name:年级,std.level.name:层次,std.state.department.name:院系,std.state.major.name:专业,std.state.direction.name:专业方向,std.state.squad.name:班级,mobile:手机,thesisTitle:论文题目,researchField:研究方向,advisor.teacher.code:指导教师工号,advisor.teacher.name:指导教师姓名,advisor.mobile:指导老师手机",null,'fileName=学生信息'));
       [/@]
       [@b.row]
         [@b.boxcol/]
