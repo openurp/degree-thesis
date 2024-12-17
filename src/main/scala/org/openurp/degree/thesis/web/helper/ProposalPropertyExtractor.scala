@@ -22,14 +22,20 @@ import org.beangle.data.dao.EntityDao
 import org.openurp.degree.thesis.model.{Proposal, Writer}
 
 class ProposalPropertyExtractor(entityDao: EntityDao) extends DefaultPropertyExtractor {
+  var proposal: Proposal = _
+
   override def get(target: Object, property: String): Any = {
     val writer = target.asInstanceOf[Writer]
-    if (property.startsWith("proposal.status")) {
+    if (null == proposal || proposal.writer != writer) {
       val proposals = entityDao.findBy(classOf[Proposal], "writer" -> writer)
-      if proposals.isEmpty then "未提交审查" else proposals.head.status.toString
-    } else if (property.startsWith("proposal.advisorOpinion")) {
-      val proposals = entityDao.findBy(classOf[Proposal], "writer" -> writer)
-      if proposals.isEmpty then "" else proposals.head.advisorOpinion.getOrElse("")
+      if (proposals.nonEmpty) proposal = proposals.head
+    }
+
+    if (property.startsWith("proposal.")) {
+      val p = property.substring("proposal.".length)
+      p match
+        case "status" => if null == proposal then "未提交审查" else proposal.status.toString
+        case _ => if (null == proposal) then "" else Properties.get[Any](proposal, p)
     } else {
       Properties.get[Any](writer, property)
     }

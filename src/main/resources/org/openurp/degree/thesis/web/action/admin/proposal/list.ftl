@@ -10,7 +10,10 @@
     bar.addItem("退回",action.multi("reject","确认退回重新修改?"));
     bar.addItem("${b.text("action.export")}",action.exportData("std.code:学号,std.name:姓名,std.state.department.name:院系,"+
                 "std.state.major.name:专业,std.state.direction.name:专业方向,std.state.squad.name:班级,thesisTitle:论文题目,"+
-                "researchField:研究方向,advisor.teacher.name:指导老师,proposal.status:是否确认,proposal.advisorOpinion:指导教师意见",null,'fileName=开题报告'));
+                "researchField:研究方向,advisor.teacher.name:指导老师,"+
+                "proposal.meanings:选题研究的目的和意义,proposal.conditions:选题的研究现状,"+
+                "proposal.outline:论文提纲,proposal.references:参考文献,proposal.methods:研究方法,"+
+                "proposal.status:是否确认,proposal.advisorOpinion:指导教师意见",null,'fileName=开题报告'));
   [/@]
   [@b.row]
     [@b.boxcol/]
