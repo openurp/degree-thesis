@@ -28,7 +28,7 @@ class ProposalPropertyExtractor(entityDao: EntityDao) extends DefaultPropertyExt
     val writer = target.asInstanceOf[Writer]
     if (null == proposal || proposal.writer != writer) {
       val proposals = entityDao.findBy(classOf[Proposal], "writer" -> writer)
-      if (proposals.nonEmpty) proposal = proposals.head
+      if (proposals.nonEmpty) proposal = proposals.head else proposal = null
     }
 
     if (property.startsWith("proposal.")) {
