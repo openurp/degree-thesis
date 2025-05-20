@@ -19,6 +19,7 @@ package org.openurp.degree.thesis.web.action.advisor
 
 import org.beangle.commons.lang.Numbers
 import org.beangle.webmvc.view.View
+import org.openurp.base.model.AuditStatus
 import org.openurp.degree.thesis.model.*
 
 import java.time.Instant
@@ -34,7 +35,15 @@ class ReviewAction extends AdvisorSupport {
     put("papers", papers)
     val reviews = entityDao.findBy(classOf[ThesisReview], "writer", writers).map(x => (x.writer, x)).toMap
     val checks = entityDao.findBy(classOf[CopyCheck], "writer", writers).groupBy(_.writer)
-    val midtermChecks = entityDao.findBy(classOf[MidtermCheck], "writer", writers).map(x => (x.writer, x)).toMap
+    //FIXME 需要检查是否启用了中期检查
+    //    var midtermChecks = entityDao.findBy(classOf[MidtermCheck], "writer", writers).map(x => (x.writer, x)).toMap
+    //    if (midtermChecks.isEmpty) {
+    val midtermChecks = writers.map { x =>
+      val c = new MidtermCheck()
+      c.status = AuditStatus.Passed
+      (x, c)
+    }.toMap
+    //    }
     val blindReviews = entityDao.findBy(classOf[BlindPeerReview], "writer", writers).map(x => (x.writer, x)).toMap
     put("checks", checks)
     put("reviews", reviews)

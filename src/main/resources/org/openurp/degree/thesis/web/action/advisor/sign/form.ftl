@@ -6,21 +6,9 @@
   [@b.field label="指导学生"]
     [#list writers as writer]${writer.name}[#sep]&nbsp;[/#list]
   [/@]
-  [@b.esign id="signature" name="signature" label="签名" required="false" theme="sign"/]
+  [@b.esign id="signature" name="signature" label="签名" required="false"/]
   [@b.formfoot]
-    <button id="process_btn" class="btn btn-outline-primary btn-sm" onclick="return processSign(this.form)">提交</button>
+    [@b.submit/]
   [/@]
 [/@]
-<script>
-  function processSign(){
-    document.getElementById("process_btn").innerHTML="正在生成签名..."
-    sign.generate().then(function(res){
-      document.getElementById('signature').value = res;
-      bg.form.submit(document.signForm);
-      return false;
-    }).catch(function(err){alert(err)});
-    document.getElementById("process_btn").innerHTML="提交"
-    return false;
-  }
-</script>
 [@b.foot/]

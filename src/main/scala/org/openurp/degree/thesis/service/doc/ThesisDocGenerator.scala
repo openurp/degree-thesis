@@ -18,7 +18,7 @@
 package org.openurp.degree.thesis.service.doc
 
 import org.beangle.commons.collection.Collections
-import org.beangle.doc.docx.DocHelper
+import org.beangle.doc.docx.DocTemplate
 import org.openurp.base.model.{AuditStatus, Department}
 import org.openurp.base.std.model.GraduateSeason
 import org.openurp.code.job.model.ProfessionalTitle
@@ -27,8 +27,8 @@ import org.openurp.degree.thesis.web.helper.SignatureHelper
 
 import java.io.{ByteArrayInputStream, InputStream}
 import java.net.URL
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, ZoneId}
 import scala.math.BigDecimal.RoundingMode
 
 object ThesisDocGenerator extends AbstractFileGenerator {
@@ -37,7 +37,7 @@ object ThesisDocGenerator extends AbstractFileGenerator {
       case None => Array.empty[Byte]
       case Some(url) =>
         val data = extract(writer)
-        DocHelper.toDoc(url, data)
+        DocTemplate.process(url, data)
 
     new ByteArrayInputStream(bytes)
   }
@@ -66,7 +66,7 @@ object ThesisDocGenerator extends AbstractFileGenerator {
           data.put("unconfirmed", "√")
           data.put("confirmed", " ")
 
-        DocHelper.toDoc(url, data)
+        DocTemplate.process(url, data)
 
     new ByteArrayInputStream(bytes)
   }
@@ -96,13 +96,16 @@ object ThesisDocGenerator extends AbstractFileGenerator {
         data.put("thesis_review_time", stageTime2(plan.getStageTime(Stage.ThesisReview)))
         data.put("oral_defense_time", stageTime2(plan.getStageTime(Stage.OralDefense)))
 
-        val formatter = DateTimeFormatter.ofPattern("YYYY 年 MM 月 dd 日")
+        val formatter = DateTimeFormatter.ofPattern("yyyy 年 MM 月 dd 日")
         data.put("begin_on", formatter.format(plan.getStageTime(Stage.Subject).beginOn))
         data.put("end_on", formatter.format(plan.getStageTime(Stage.OralDefense).endOn))
         signature foreach { s =>
-          s.writerUrl foreach { l => data.put("esign", SignatureHelper.readBase64(l)) }
+          s.writerUrl foreach { l =>
+            val s = SignatureHelper.readBase64(l)
+            if (null != s) data.put("esign", s)
+          }
         }
-        DocHelper.toDoc(url, data)
+        DocTemplate.process(url, data)
     new ByteArrayInputStream(bytes)
   }
 
@@ -129,27 +132,30 @@ object ThesisDocGenerator extends AbstractFileGenerator {
           addDate("date", None, data)
           data.put("advisor_opinion", "")
         }
-        DocHelper.toDoc(url, data)
+        DocTemplate.process(url, data)
 
     new ByteArrayInputStream(bytes)
   }
 
-  def genGuidance(writer: Writer, plan: DepartPlan, guidances: Seq[Guidance], idx: Int): InputStream = {
+  def genGuidance(writer: Writer, plan: DepartPlan, guidances: Seq[Guidance], idx: Int, signature: Option[Signature]): InputStream = {
     val bytes = getTemplate(s"guidance${idx}.docx") match
       case None => Array.empty[Byte]
       case Some(url) =>
         val data = extract(writer)
         val ordered = guidances.sortBy(_.idx)
-        val dateFormatter = DateTimeFormatter.ofPattern("YYYY.MM.dd")
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
         val stage = plan.getStageTime(if idx == 1 then Stage.Guidance1 else Stage.Guidance2)
         data.put("stage_begin_on", dateFormatter.format(stage.beginOn))
         data.put("stage_end_on", dateFormatter.format(stage.endOn))
         data.put("content1", ordered.head.contents)
         data.put("content2", ordered.last.contents)
-        val formatter2 = DateTimeFormatter.ofPattern("YYYY年 MM月 dd日")
+        val formatter2 = DateTimeFormatter.ofPattern("yyyy年 MM月 dd日")
         data.put("date1", formatter2.format(ordered.head.updatedAt.atZone(ZoneId.systemDefault()).toLocalDate))
         data.put("date2", formatter2.format(ordered.last.updatedAt.atZone(ZoneId.systemDefault()).toLocalDate))
-        DocHelper.toDoc(url, data)
+        signature foreach { s =>
+          s.advisorUrl foreach { l => data.put("esign", SignatureHelper.readBase64(l)) }
+        }
+        DocTemplate.process(url, data)
 
     new ByteArrayInputStream(bytes)
   }
@@ -172,7 +178,7 @@ object ThesisDocGenerator extends AbstractFileGenerator {
           data.put("conclusion", check.conclusion.getOrElse(""))
           addDate("date", Some(check.submitAt), data)
         }
-        DocHelper.toDoc(url, data)
+        DocTemplate.process(url, data)
 
     new ByteArrayInputStream(bytes)
   }
@@ -207,7 +213,7 @@ object ThesisDocGenerator extends AbstractFileGenerator {
         data.put("first_check_result", result1)
         data.put("second_check_result", result2)
         data.put("comments_before_2ndcheck", comment)
-        DocHelper.toDoc(url, data)
+        DocTemplate.process(url, data)
 
     new ByteArrayInputStream(bytes)
   }
@@ -221,7 +227,7 @@ object ThesisDocGenerator extends AbstractFileGenerator {
           case None => data.put("chosen", "否"); data.put("conclusion", "--")
           case Some(r) => data.put("chosen", "是"); data.put("conclusion", r.score.getOrElse("--").toString)
         data.put("comment", "")
-        DocHelper.toDoc(url, data)
+        DocTemplate.process(url, data)
 
     new ByteArrayInputStream(bytes)
   }
@@ -247,12 +253,12 @@ object ThesisDocGenerator extends AbstractFileGenerator {
           data.put("review_remark", "")
           addDate("date", r.advisorReviewAt, data)
         }
-        DocHelper.toDoc(url, data)
+        DocTemplate.process(url, data)
 
     new ByteArrayInputStream(bytes)
   }
 
-  def genCrossReview(writer: Writer, review: Option[ThesisReview]): InputStream = {
+  def genCrossReview(writer: Writer, review: Option[ThesisReview], signature: Option[Signature]): InputStream = {
     val bytes = getTemplate(s"crossReview.docx") match
       case None => Array.empty[Byte]
       case Some(url) =>
@@ -265,8 +271,11 @@ object ThesisDocGenerator extends AbstractFileGenerator {
             data.put(if p then "defense_permited" else "defense_unpermited", "√")
           }
           addDate("date", r.crossReviewAt, data)
+          signature foreach { s =>
+            s.advisorUrl foreach { l => data.put("esign", SignatureHelper.readBase64(l)) }
+          }
         }
-        DocHelper.toDoc(url, data)
+        DocTemplate.process(url, data)
 
     new ByteArrayInputStream(bytes)
   }
@@ -297,7 +306,7 @@ object ThesisDocGenerator extends AbstractFileGenerator {
           data.put("thesis_summary", i.thesisSummaryScore.map(_.toString).getOrElse(""))
           data.put("answer_summary", i.answerSummaryScore.map(_.toString).getOrElse(""))
         }
-        DocHelper.toDoc(url, data)
+        DocTemplate.process(url, data)
 
     new ByteArrayInputStream(bytes)
   }
@@ -309,7 +318,7 @@ object ThesisDocGenerator extends AbstractFileGenerator {
         val data = Collections.newMap[String, String]
         data.put("season_code", season.code)
         data.put("depart_name", depart.name)
-        DocHelper.toDoc(url, data)
+        DocTemplate.process(url, data)
 
     new ByteArrayInputStream(bytes)
   }
@@ -350,7 +359,7 @@ object ThesisDocGenerator extends AbstractFileGenerator {
         data.put("assoPercent", (Math.round(associateStudentCount * 10000.0 / writers.size).asInstanceOf[Int] / 100.0).toString + "%")
         data.put("lecPercent", (Math.round(lecturerStudentCount * 10000.0 / writers.size).asInstanceOf[Int] / 100.0).toString + "%")
         data.put("otherPercent", (Math.round(otherStudentCount * 10000.0 / writers.size).asInstanceOf[Int] / 100.0).toString + "%")
-        DocHelper.toDoc(url, data)
+        DocTemplate.process(url, data)
 
     new ByteArrayInputStream(bytes)
   }
