@@ -19,7 +19,7 @@ package org.openurp.degree.thesis.web.helper
 
 object ScoreTextHelper {
 
-  def convert(score: Int): String = {
+  def convert(score: Float): String = {
     if score <= 59 then "不及格"
     else if score <= 69 then "及格"
     else if score <= 79 then "中"

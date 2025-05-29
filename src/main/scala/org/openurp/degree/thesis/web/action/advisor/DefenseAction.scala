@@ -363,13 +363,13 @@ class DefenseAction extends AdvisorSupport {
     val group = entityDao.get(classOf[DefenseGroup], getLongId("group"))
     val reviews = entityDao.find(classOf[ThesisReview], getLongIds("review"))
     reviews foreach { r =>
-      getInt(s"defense_score_${r.id}") match
+      getFloat(s"defense_score_${r.id}") match
         case None =>
           r.defenseScore = None
           r.finalScore = None
           r.finalScoreText = None
         case Some(s) =>
-          val score = Math.round(r.crossReviewScore.getOrElse(0) * 0.6d + s * 0.4d).intValue()
+          val score = Math.round(r.crossReviewScore.getOrElse(0f) * 0.6d + s * 0.4d).floatValue()
           val scoreText = ScoreTextHelper.convert(score)
           r.defenseScore = Some(s)
           r.finalScore = Some(score)

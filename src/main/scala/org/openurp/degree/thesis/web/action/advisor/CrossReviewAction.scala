@@ -73,7 +73,7 @@ class CrossReviewAction extends AdvisorSupport {
   def review(): View = {
     val review = entityDao.get(classOf[ThesisReview], getLongId("thesisReview"))
     review.crossReviewOpinion = get("thesisReview.crossReviewOpinion")
-    review.crossReviewScore = getInt("thesisReview.crossReviewScore")
+    review.crossReviewScore = getFloat("thesisReview.crossReviewScore")
     review.defensePermitted = getBoolean("thesisReview.defensePermitted")
     review.crossReviewAt = Some(Instant.now)
     entityDao.saveOrUpdate(review)

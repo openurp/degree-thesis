@@ -133,7 +133,7 @@ abstract class AbstractFileGenerator {
     }
   }
 
-  protected def addScore(name: String, value: Option[Int], data: mutable.Map[String, String]): Unit = {
+  protected def addScore(name: String, value: Option[Any], data: mutable.Map[String, String]): Unit = {
     value foreach { v => data.put(name, v.toString) }
   }
 

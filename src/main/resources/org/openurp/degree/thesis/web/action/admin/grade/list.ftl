@@ -9,6 +9,7 @@
     "writer.std.state.major.name:专业,writer.std.state.squad.name:班级,writer.thesisTitle:题目,writer.advisor.teacher.name:指导老师,writer.advisor.teacher.office.name:指导教师所在教研室,advisorScore:建议得分,"+
     "crossReviewManager.name:评阅分配负责人,crossReviewer.name:交叉评阅人,crossReviewScore:交叉评阅得分,defenseScore:答辩得分,finalScore:最终得分,finalScoreText:最终成绩,remark:备注",null,'fileName=论文成绩'));
     bar.addItem("分数统计",action.method("analysis"));
+    bar.addItem("导入",action.method('importForm'));
   [/@]
   [@b.row]
     [@b.boxcol/]
@@ -28,7 +29,9 @@
       <span title="${(thesisReview.crossReviewer.office.name)!}">${(thesisReview.crossReviewer.name)!}</span>
     [/@]
     [@b.col property="crossReviewScore" title="评阅得分" width="8%"/]
-    [@b.col property="defenseScore" title="答辩得分" width="8%"/]
+    [@b.col property="defenseScore" title="答辩得分" width="8%"]
+      ${(thesisReview.defenseScore?string(".##"))!}
+    [/@]
     [@b.col property="finalScore" title="最终得分" width="8%"]
       [#if thesisReview.finalScore??]
         ${thesisReview.finalScore} ${thesisReview.finalScoreText!}

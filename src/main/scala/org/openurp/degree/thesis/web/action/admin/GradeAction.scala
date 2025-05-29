@@ -17,24 +17,29 @@
 
 package org.openurp.degree.thesis.web.action.admin
 
+import org.beangle.commons.activation.MediaTypes
 import org.beangle.commons.collection.Collections
 import org.beangle.data.dao.OqlBuilder
+import org.beangle.doc.excel.schema.ExcelSchema
+import org.beangle.doc.transfer.importer.ImportSetting
 import org.beangle.ems.app.web.WebBusinessLogger
+import org.beangle.webmvc.annotation.response
 import org.beangle.webmvc.context.ActionContext
-import org.beangle.webmvc.view.View
-import org.beangle.webmvc.support.action.{ExportSupport, RestfulAction}
+import org.beangle.webmvc.support.action.{ExportSupport, ImportSupport, RestfulAction}
+import org.beangle.webmvc.view.{Stream, View}
 import org.openurp.base.model.{AuditStatus, Project}
 import org.openurp.base.std.model.GraduateSeason
 import org.openurp.degree.thesis.model.*
 import org.openurp.degree.thesis.service.{ThesisGradeSyncService, ThesisPlanService}
-import org.openurp.degree.thesis.web.helper.ScoreTextHelper
+import org.openurp.degree.thesis.web.helper.{ScoreTextHelper, ThesisReviewImportListener}
 import org.openurp.starter.web.support.ProjectSupport
 
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream}
 import scala.collection.mutable
 
 /** 成绩管理
  */
-class GradeAction extends RestfulAction[ThesisReview], ExportSupport[ThesisReview], ProjectSupport {
+class GradeAction extends RestfulAction[ThesisReview], ExportSupport[ThesisReview], ImportSupport[ThesisReview], ProjectSupport {
 
   var thesisPlanService: ThesisPlanService = _
   var businessLogger: WebBusinessLogger = _
@@ -67,10 +72,12 @@ class GradeAction extends RestfulAction[ThesisReview], ExportSupport[ThesisRevie
         review.finalScore = None
         review.finalScoreText = None
       case Some(s) =>
-        val score = Math.round(review.crossReviewScore.getOrElse(0) * 0.6d + s * 0.4d).intValue()
-        review.finalScore = Some(score)
-        review.finalScoreText = Some(ScoreTextHelper.convert(score))
-        review.remark = None
+        review.crossReviewScore foreach { crs =>
+          val score = Math.round(crs * 0.6d + s * 0.4d).intValue()
+          review.finalScore = Some(score)
+          review.finalScoreText = Some(ScoreTextHelper.convert(score))
+          review.remark = None
+        }
     }
 
     if (review.subjectScore.nonEmpty) {
@@ -82,12 +89,16 @@ class GradeAction extends RestfulAction[ThesisReview], ExportSupport[ThesisRevie
     super.saveAndRedirect(review)
   }
 
-  private def calcFinalScore(r: ThesisReview): (Option[Int], Option[String]) = {
+  private def calcFinalScore(r: ThesisReview): (Option[Float], Option[String]) = {
     r.defenseScore match {
       case None => (None, None)
       case Some(s) =>
-        val score = Math.round(r.crossReviewScore.getOrElse(0) * 0.6d + s * 0.4d).intValue()
-        (Some(score), Some(ScoreTextHelper.convert(score)))
+        r.crossReviewScore match {
+          case None => (None, None)
+          case Some(crs) =>
+            val score = Math.round(crs * 0.6d + s * 0.4d).floatValue()
+            (Some(score), Some(ScoreTextHelper.convert(score)))
+        }
     }
   }
 
@@ -107,6 +118,28 @@ class GradeAction extends RestfulAction[ThesisReview], ExportSupport[ThesisRevie
       thesisGradeSyncService.sync(review)
     }
     redirect("search", "论文成绩同步成功")
+  }
+
+  @response
+  def downloadTemplate(): Any = {
+    val schema = new ExcelSchema()
+    val sheet = schema.createScheet("数据模板")
+    sheet.title("论文成绩导入模板")
+    sheet.remark("特别说明：\n1、不可改变本表格的行列结构以及批注，否则将会导入失败！\n2、必须按照规格说明的格式填写。\n3、可以多次导入，重复的信息会被新数据更新覆盖。\n4、保存的excel文件名称可以自定。")
+    sheet.add("学号", "writer.std.code").length(20).remark("≤20位").required()
+    sheet.add("指导老师工号", "advisor.teacher.staff.code").length(20).remark("≤20位")
+    sheet.add("指导老师建议分数", "thesisReview.advisorScore").decimal()
+    sheet.add("交叉评阅分数", "thesisReview.crossReviewScore").decimal()
+    sheet.add("答辩分数", "thesisReview.defenseScore").decimal()
+    sheet.add("最终总分", "thesisReview.finalScore").decimal()
+    val os = new ByteArrayOutputStream()
+    schema.generate(os)
+    Stream(new ByteArrayInputStream(os.toByteArray), MediaTypes.ApplicationXlsx, "答辩成绩导入模板.xlsx")
+  }
+
+  protected override def configImport(setting: ImportSetting): Unit = {
+    val season = entityDao.get(classOf[GraduateSeason], getLongId("thesisReview.writer.season"))
+    setting.listeners = List(new ThesisReviewImportListener(season, entityDao))
   }
 
   def analysis(): View = {

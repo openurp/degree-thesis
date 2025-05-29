@@ -481,7 +481,7 @@ class DefenseAction extends RestfulAction[DefenseGroup], ExportSupport[DefenseGr
           r.finalScoreText = None
         case Some(s) =>
           r.defenseScore = Some(s)
-          val score = Numbers.round(r.crossReviewScore.getOrElse(0) * 0.6d + s * 0.4d, 0).intValue()
+          val score = Numbers.round(r.crossReviewScore.getOrElse(0f) * 0.6d + s * 0.4d, 0).intValue()
           val scoreText = ScoreTextHelper.convert(score)
           r.remark = None
           r.finalScore = Some(score)
