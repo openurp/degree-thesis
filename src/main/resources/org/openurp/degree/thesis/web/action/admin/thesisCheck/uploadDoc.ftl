@@ -7,7 +7,7 @@
     <p>${message}</p>
   [/#list]
   [@b.form name="form" action="!uploadDefenseDoc" theme="list"]
-    [@b.field label="毕业界别"] ${season.graduateOn}[/@]
+    [@b.field label="毕业界别"] ${season.graduateIn}[/@]
     [@b.file name="file" extensions="zip" maxSize="100M" label="选择文件"/]
     [@b.formfoot]
       <input type="hidden" name="thesisCheck.writer.season.id" value="${season.id}"/>

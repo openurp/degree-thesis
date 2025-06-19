@@ -68,7 +68,7 @@ class ThesisGradeSyncServiceImpl extends ThesisGradeSyncService, Logging, Initia
 
   def sync(review: ThesisReview): Boolean = {
     val std = review.writer.std
-    val semester = semesterService.get(std.project, review.writer.season.graduateOn.atDay(1))
+    val semester = semesterService.get(std.project, review.writer.season.graduateIn.atDay(1))
     if (review.finalScore.isEmpty) return false
     val rs = jdbcExecutor.query("select cg.id,cg.score from edu.course_grades cg,base.courses kc where cg.course_id=kc.id" +
       " and cg.std_id=? and cg.semester_id=? and (kc.name like '毕业论文%' or kc.name like '%学位论文%')", review.writer.std.id, semester.id)

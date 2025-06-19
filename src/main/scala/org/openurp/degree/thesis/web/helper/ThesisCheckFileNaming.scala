@@ -51,7 +51,7 @@ object ThesisCheckFileNaming {
   }
 
   def getShortSchoolYear(season: GraduateSeason): String = {
-    val year = season.graduateOn.getYear.toString
+    val year = season.graduateIn.getYear.toString
     val endYear = year.substring(year.length - 2)
     val beforeYear = (endYear.toInt - 1).toString
     s"${beforeYear}${endYear}" //check.season.graduateOn

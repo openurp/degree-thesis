@@ -24,14 +24,14 @@ ThisBuild / description := "The OpenURP Thesis Webapp"
 ThisBuild / homepage := Some(url("http://openurp.github.io/thesis/index.html"))
 ThisBuild / resolvers += Resolver.mavenLocal
 
-val apiVer = "0.42.1-SNAPSHOT"
-val starterVer = "0.3.54"
-val eduCoreVer = "0.3.8"
+val apiVer = "0.44.0"
+val starterVer = "0.3.58"
+val eduCoreVer = "0.3.11"
+
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVer
 val openurp_degree_api = "org.openurp.degree" % "openurp-degree-api" % apiVer
 val openurp_stater_web = "org.openurp.starter" % "openurp-starter-web" % starterVer
 val openurp_edu_core = "org.openurp.edu" % "openurp-edu-core" % eduCoreVer
-val beangle_doc_docx = "org.beangle.doc" % "beangle-doc-docx" % "0.4.11-SNAPSHOT"
 
 val itextpdf = "com.itextpdf" % "itextpdf" % "5.5.13.3"
 val itext_asian = "com.itextpdf" % "itext-asian" % "5.2.0"

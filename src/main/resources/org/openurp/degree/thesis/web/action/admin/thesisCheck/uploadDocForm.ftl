@@ -4,7 +4,7 @@
     bar.addBack();
   [/@]
   [@b.form name="form" action="!uploadDoc" theme="list"]
-    [@b.field label="抽检界别"] ${season.graduateOn}[/@]
+    [@b.field label="抽检界别"] ${season.graduateIn}[/@]
     [@b.radios label="材料类型" items=docTypes name="docType.id"/]
     [@b.file name="file" extensions="zip" maxSize="550M" label="选择文件"/]
     [@b.formfoot]

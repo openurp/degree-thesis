@@ -156,7 +156,7 @@ class SubjectAction extends RestfulAction[Subject], DepartSupport, ProjectSuppor
     val historyStats = new mutable.HashMap[String, Any]
     val historyQuery = OqlBuilder.from[Array[Any]](classOf[Subject].getName, "h")
     historyQuery.where("h.advisor in(:js)", advisors)
-    historyQuery.where("h.season.graduateOn<=:graduateOn", season.graduateOn)
+    historyQuery.where("h.season.graduateIn<=:graduateIn", season.graduateIn)
     historyQuery.select("h.advisor.id,count(distinct h.name)")
     historyQuery.groupBy("h.advisor.id")
     val historyData = entityDao.search(historyQuery)
@@ -174,7 +174,7 @@ class SubjectAction extends RestfulAction[Subject], DepartSupport, ProjectSuppor
     val plan = thesisPlanService.getPlan().get
     val advisor = entityDao.get(classOf[Advisor], getLongId("subject.advisor"))
     val query = OqlBuilder.from(classOf[Subject], "subject").where("subject.advisor=:advisor", advisor)
-    query.where("subject.season.graduateOn<:graduateOn", plan.season.graduateOn)
+    query.where("subject.season.graduateIn<:graduateIn", plan.season.graduateIn)
     query.where("not exists(from " + classOf[Subject].getName +
       " s2 where s2.name=subject.name and s2.advisor=subject.advisor and s2.season.graduateOn > subject.season.graduateOn)")
     query.orderBy("subject.season.graduateOn desc")
