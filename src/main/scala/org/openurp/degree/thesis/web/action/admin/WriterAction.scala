@@ -42,7 +42,7 @@ class WriterAction extends RestfulAction[Writer], ProjectSupport, ExportSupport[
     given project: Project = getProject
 
     val gQuery = OqlBuilder.from(classOf[GraduateSeason], "gg")
-    gQuery.orderBy("gg.graduateOn desc")
+    gQuery.orderBy("gg.graduateIn desc")
     put("seasons", entityDao.search(gQuery))
     put("departs", getDeparts)
     super.indexSetting()
@@ -103,7 +103,7 @@ class WriterAction extends RestfulAction[Writer], ProjectSupport, ExportSupport[
 
   override protected def editSetting(entity: Writer): Unit = {
     val gQuery = OqlBuilder.from(classOf[GraduateSeason], "gg")
-    gQuery.orderBy("gg.graduateOn desc")
+    gQuery.orderBy("gg.graduateIn desc")
     gQuery.limit(1, 1)
     val seasons = entityDao.search(gQuery)
     put("seasons", seasons)

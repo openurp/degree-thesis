@@ -55,7 +55,7 @@ class DefenseAction extends RestfulAction[DefenseGroup], ExportSupport[DefenseGr
     put("offices", offices)
 
     val gQuery = OqlBuilder.from(classOf[GraduateSeason], "gg")
-    gQuery.orderBy("gg.graduateOn desc")
+    gQuery.orderBy("gg.graduateIn desc")
     put("seasons", entityDao.search(gQuery))
   }
 

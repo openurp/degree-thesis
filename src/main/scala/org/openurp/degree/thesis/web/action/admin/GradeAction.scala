@@ -49,7 +49,7 @@ class GradeAction extends RestfulAction[ThesisReview], ExportSupport[ThesisRevie
     given project: Project = getProject
 
     val gQuery = OqlBuilder.from(classOf[GraduateSeason], "gg")
-    gQuery.orderBy("gg.graduateOn desc")
+    gQuery.orderBy("gg.graduateIn desc")
     put("seasons", entityDao.search(gQuery))
     put("departs", getDeparts)
     forward()

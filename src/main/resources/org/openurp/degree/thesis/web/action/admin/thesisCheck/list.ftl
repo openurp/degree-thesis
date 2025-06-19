@@ -18,7 +18,7 @@
        "writer.std.project.school.code:学位授予单位代码,writer.std.project.school.name:学位授予单位名称,writerName:姓名,"+
        "writer.std.project.school.code:培养单位码,degreeMajorCode:学士学位专业代码,"+
        "degreeMajorName:学士学位专业名称,certMajorName:证书专业名称,"+
-       "enrollOn:入学年月,writer.std.code:学号,examineeCode:考生号,graduateOn:毕业年月,"+
+       "enrollIn:入学年月,writer.std.code:学号,examineeCode:考生号,graduateIn:毕业年月,"+
        "majorMinorDegree:是否主辅修学位,dualDegree:是否双学士学位,jointDegree:是否联合学位,jointOrgCode:联合培养单位码," +
        "secondDegree:是否第二学位,minorDegree:是否辅修学位,eduType:学位类型,"+
        "thesisType:论文类型,advisor:导师姓名,title:论文题目,keywords:论文关键词,"+
@@ -37,8 +37,8 @@
     [@b.col property="degreeMajorName"  title="学位专业" width="120px"]
     <div class="text-ellipsis" title="${(thesisCheck.degreeMajorName)!}">${(thesisCheck.degreeMajorName)!}</div>
     [/@]
-    [@b.col property="enrollOn"  title="入学-毕业年月" width="120px"]
-     ${(thesisCheck.enrollOn?string('yyyyMM'))!}~${(thesisCheck.graduateOn?string('yyyyMM'))!}
+    [@b.col property="enrollIn"  title="入学-毕业年月" width="120px"]
+     ${(thesisCheck.enrollIn?string('yyyyMM'))!}~${(thesisCheck.graduateIn?string('yyyyMM'))!}
     [/@]
     [@b.col property="advisor" title="指导老师" width="80px"/]
     [@b.col property="language.name" title="撰写语言" width="60px"/]

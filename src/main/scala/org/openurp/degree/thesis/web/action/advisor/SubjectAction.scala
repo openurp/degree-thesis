@@ -77,8 +77,8 @@ class SubjectAction extends AdvisorSupport, EntityAction[Subject] {
     val query = OqlBuilder.from(classOf[Subject], "subject").where("subject.advisor=:me", js)
     query.where("subject.season.graduateIn<:graduateIn", plan.season.graduateIn)
     query.where("not exists(from " + classOf[Subject].getName +
-      " s2 where s2.name=subject.name and s2.advisor=subject.advisor and s2.season.graduateOn > subject.season.graduateOn)")
-    query.orderBy("subject.season.graduateOn desc")
+      " s2 where s2.name=subject.name and s2.advisor=subject.advisor and s2.season.graduateIn > subject.season.graduateIn)")
+    query.orderBy("subject.season.graduateIn desc")
     val lstmList = entityDao.search(query)
     put("lstmList", lstmList)
 

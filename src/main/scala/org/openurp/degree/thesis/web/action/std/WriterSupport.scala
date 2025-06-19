@@ -42,7 +42,7 @@ abstract class WriterSupport extends ActionSupport {
     if (null==writers || writers.isEmpty) {
       val query = OqlBuilder.from(classOf[Writer], "w")
       query.where("w.std.code=:code", Securities.user)
-      query.orderBy("w.season.graduateOn desc")
+      query.orderBy("w.season.graduateIn desc")
       entityDao.search(query).head
     } else {
       writers.head

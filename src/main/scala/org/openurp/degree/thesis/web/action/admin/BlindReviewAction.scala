@@ -45,7 +45,7 @@ class BlindReviewAction extends RestfulAction[BlindPeerReview], ProjectSupport, 
 
     put("departs", getDeparts)
     val gQuery = OqlBuilder.from(classOf[GraduateSeason], "gg")
-    gQuery.orderBy("gg.graduateOn desc")
+    gQuery.orderBy("gg.graduateIn desc")
     put("seasons", entityDao.search(gQuery))
     forward()
   }
