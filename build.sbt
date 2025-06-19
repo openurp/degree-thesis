@@ -2,11 +2,7 @@ import org.openurp.parent.Dependencies.*
 import org.openurp.parent.Settings.*
 
 ThisBuild / organization := "org.openurp.degree.thesis"
-<<<<<<< HEAD
 ThisBuild / version := "0.0.5"
-=======
-ThisBuild / version := "0.0.7-SNAPSHOT"
->>>>>>> develop
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
