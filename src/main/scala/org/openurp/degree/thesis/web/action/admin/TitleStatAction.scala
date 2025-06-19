@@ -38,7 +38,7 @@ class TitleStatAction extends ActionSupport, EntityAction[AdvisorSubjectStat], P
     given project: Project = getProject
 
     val seasons = entityDao.getAll(classOf[GraduateSeason])
-    put("seasons", seasons.sortBy(_.graduateOn))
+    put("seasons", seasons.sortBy(_.graduateIn))
     val query = OqlBuilder.from(classOf[Teacher], "t")
     query.where("t.staff.school=:school", project.school)
     query.select("distinct t.staff.title")
@@ -62,7 +62,7 @@ class TitleStatAction extends ActionSupport, EntityAction[AdvisorSubjectStat], P
     put("fromSeason", fromSeason)
     put("toSeason", toSeason)
     val query = OqlBuilder.from[Array[Object]](classOf[Writer].getName, "writer")
-    query.where("writer.season.graduateOn between :startYear and :endYear", fromSeason.graduateOn, toSeason.graduateOn)
+    query.where("writer.season.graduateIn between :startYear and :endYear", fromSeason.graduateIn, toSeason.graduateIn)
     query.where("writer.advisor is not null")
     QueryHelper.populate(query)
     if (statByAdvisor) {
@@ -86,7 +86,7 @@ class TitleStatAction extends ActionSupport, EntityAction[AdvisorSubjectStat], P
     if (statByAdvisor) {
       stats.toBuffer.sortBy(x => x.advisor.teacher.department.code + x.advisor.teacher.code)
     } else {
-      stats.toBuffer.sortBy(x => x.advisor.teacher.department.code + x.advisor.teacher.code + x.season.graduateOn.toString)
+      stats.toBuffer.sortBy(x => x.advisor.teacher.department.code + x.advisor.teacher.code + x.season.graduateIn.toString)
     }
   }
 

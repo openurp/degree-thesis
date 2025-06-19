@@ -33,7 +33,7 @@ class PlanAction extends RestfulAction[ThesisPlan], ProjectSupport {
 
   override def index(): View = {
     val gQuery = OqlBuilder.from(classOf[GraduateSeason], "gg")
-    gQuery.orderBy("gg.graduateOn desc")
+    gQuery.orderBy("gg.graduateIn desc")
     put("seasons", entityDao.search(gQuery))
     forward()
   }
@@ -168,13 +168,13 @@ class PlanAction extends RestfulAction[ThesisPlan], ProjectSupport {
   def cloneLast(): View = {
     val season = entityDao.get(classOf[GraduateSeason], getLongId("plan.season"))
     val q = OqlBuilder.from(classOf[ThesisPlan], "plan")
-    q.where("plan.season.graduateOn < :graduateOn", season.graduateOn)
-    q.orderBy("plan.season.graduateOn desc")
+    q.where("plan.season.graduateIn < :graduateIn", season.graduateIn)
+    q.orderBy("plan.season.graduateIn desc")
 
     val lastPlan = entityDao.first(q)
     if (lastPlan.nonEmpty) {
       val last = lastPlan.get
-      val duration = Duration.between(last.season.graduateOn.atDay(1).atTime(LocalTime.MIN), season.graduateOn.atDay(1).atTime(LocalTime.MIN))
+      val duration = Duration.between(last.season.graduateIn.atDay(1).atTime(LocalTime.MIN), season.graduateIn.atDay(1).atTime(LocalTime.MIN))
       val plan = new ThesisPlan
       plan.season = season
       plan.project = last.project

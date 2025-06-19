@@ -3,13 +3,13 @@
     [#list Parameters?keys as key]
       [#if key!='method']<input type="hidden" name="${key}" value="${Parameters[key]}" />[/#if]
     [/#list]
-    <input type="hidden" name="titles" value="season.graduateOn:毕业年份,advisor.teacher.staff.code:工号,advisor.teacher.name:姓名,advisor.teacher.staff.gender.name:性别,advisor.teacher.staff.title.name:职称,advisor.teacher.department.name:院系,count:篇数"/>
+    <input type="hidden" name="titles" value="season.graduateIn:毕业年份,advisor.teacher.staff.code:工号,advisor.teacher.name:姓名,advisor.teacher.staff.gender.name:性别,advisor.teacher.staff.title.name:职称,advisor.teacher.department.name:院系,count:篇数"/>
     [@b.submit value="导出" class="btn btn-primary btn-sm"/]
   [/@]
   [@b.grid items=stats var="stat" style="border:0.5px solid #006CB2"]
     [@b.row]
       [@b.col width="80px" title="序号"]${stat_index+1}[/@]
-      [@b.col property="season.graduateOn" title="毕业年份" width="80px"/]
+      [@b.col property="season.graduateIn" title="毕业年份" width="80px"/]
       [@b.col property="advisor.teacher.staff.code" title="工号" width="80px" style="mso-number-format:'\\@';"/]
       [@b.col property="advisor.teacher.name" title="姓名" width="100px"]
         [@b.a href="!writers?advisorId="+stat.advisor.id target="_blank"]${stat.advisor.teacher.name}[/@]

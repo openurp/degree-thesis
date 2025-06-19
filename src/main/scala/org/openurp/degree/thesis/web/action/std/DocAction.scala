@@ -129,7 +129,8 @@ class DocAction extends WriterSupport {
     if (guidances.size < 2) {
       redirect(to(classOf[GuidanceAction], "index", "stage=" + Stage.Guidance1.id), "尚未填写完成")
     } else {
-      Stream(ThesisDocGenerator.genGuidance(writer, plan, guidances, 1), docx, s"${writer.std.code}教师指导记录I.docx")
+      val signature = entityDao.findBy(classOf[Signature], "writer", writer).headOption
+      Stream(ThesisDocGenerator.genGuidance(writer, plan, guidances, 1, signature), docx, s"${writer.std.code}教师指导记录I.docx")
     }
   }
 
@@ -140,7 +141,8 @@ class DocAction extends WriterSupport {
     if (guidances.size < 2) {
       redirect(to(classOf[GuidanceAction], "index", "stage=" + Stage.Guidance2.id), "尚未填写完成")
     } else {
-      Stream(ThesisDocGenerator.genGuidance(writer, plan, guidances, 2), docx, s"${writer.std.code}教师指导记录II.docx")
+      val signature = entityDao.findBy(classOf[Signature], "writer", writer).headOption
+      Stream(ThesisDocGenerator.genGuidance(writer, plan, guidances, 2, signature), docx, s"${writer.std.code}教师指导记录II.docx")
     }
   }
 
@@ -184,7 +186,15 @@ class DocAction extends WriterSupport {
     if (review.isEmpty || review.get.crossReviewScore.isEmpty) {
       redirect("index", "交叉评阅尚未评分")
     } else {
-      Stream(ThesisDocGenerator.genCrossReview(writer, review), docx, s"${writer.std.code}评阅表.docx")
+      val season = writer.season
+      var signature: Option[Signature] = None
+      review.get.crossReviewer foreach { reviewer =>
+        val q = OqlBuilder.from(classOf[Signature], "s")
+        q.where("s.writer.season=:season and s.writer.advisor.teacher=:teacher", season, reviewer)
+        q.where("s.advisorUrl is not null")
+        signature = entityDao.search(q).headOption
+      }
+      Stream(ThesisDocGenerator.genCrossReview(writer, review, signature), docx, s"${writer.std.code}评阅表.docx")
     }
   }
 
@@ -298,5 +308,5 @@ class DocAction extends WriterSupport {
     }
   }
 
-  private def docx: MediaType =  MediaTypes.ApplicationDocx
+  private def docx: MediaType = MediaTypes.ApplicationDocx
 }

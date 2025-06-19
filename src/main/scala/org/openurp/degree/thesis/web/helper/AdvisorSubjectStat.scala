@@ -22,6 +22,9 @@ import org.openurp.base.std.model.GraduateSeason
 import org.openurp.degree.thesis.model.Advisor
 
 object AdvisorSubjectStat {
+  def main(args: Array[String]): Unit = {
+    println(this.getClass.getResource("/org/beangle/doc/docx/DocHelper$.class"))
+  }
   def apply(season: GraduateSeason, advisor: Advisor, count: Int): AdvisorSubjectStat = {
     val s = new AdvisorSubjectStat
     s.season = season

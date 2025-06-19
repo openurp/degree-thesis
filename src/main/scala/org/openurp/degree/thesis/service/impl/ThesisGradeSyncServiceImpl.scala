@@ -68,7 +68,7 @@ class ThesisGradeSyncServiceImpl extends ThesisGradeSyncService, Logging, Initia
 
   def sync(review: ThesisReview): Boolean = {
     val std = review.writer.std
-    val semester = semesterService.get(std.project, review.writer.season.graduateOn.atDay(1))
+    val semester = semesterService.get(std.project, review.writer.season.graduateIn.atDay(1))
     if (review.finalScore.isEmpty) return false
     val rs = jdbcExecutor.query("select cg.id,cg.score from edu.course_grades cg,base.courses kc where cg.course_id=kc.id" +
       " and cg.std_id=? and cg.semester_id=? and (kc.name like '毕业论文%' or kc.name like '%学位论文%')", review.writer.std.id, semester.id)
@@ -96,7 +96,7 @@ class ThesisGradeSyncServiceImpl extends ThesisGradeSyncService, Logging, Initia
     } else {
       val score = review.finalScore.get
       val gradeInfo = rs.head
-      if (gradeInfo(1).asInstanceOf[Number].intValue != score) {
+      if (null == gradeInfo(1) || gradeInfo(1).asInstanceOf[Number].intValue != score) {
         val gradingModeId = GradingMode.RankCn
         val gp = gradeRateService.getConverter(std.project, new GradingMode(gradingModeId)).calcGp(Some(score)).get
         jdbcExecutor.update("update edu.course_grades cg set score=?,score_text=?,gp=?,passed=?,updated_at=? where id = ?",
@@ -122,6 +122,12 @@ class ThesisGradeSyncServiceImpl extends ThesisGradeSyncService, Logging, Initia
         "edu.audit_plan_results jh,edu.audit_group_results kcz,edu.audit_course_results jhkc,base.courses kc"
         + " where jh.id=kcz.plan_result_id and kcz.id=jhkc.group_result_id and jhkc.course_id=kc.id"
         + " and (kc.name like '毕业论文%' or kc.name like '%学位论文%') and jh.std_id=?", std.id)
-    rs.headOption.map(x => (x(0).asInstanceOf[Number].longValue, x(1).asInstanceOf[Number].intValue))
+    if (rs.isEmpty) {
+      None
+    } else {
+      val datas = rs.head
+      if (datas(0) == null) None
+      else Some(datas(0).asInstanceOf[Number].longValue, datas(1).asInstanceOf[Number].intValue)
+    }
   }
 }

@@ -26,7 +26,7 @@ class ThesisCheckServiceImpl extends ThesisCheckService {
 
   override def findWriter(code: String): Option[Writer] = {
     val writers = entityDao.findBy(classOf[Writer], "std.code" -> code)
-    writers.sortBy(_.season.graduateOn).reverse.headOption
+    writers.sortBy(_.season.graduateIn).reverse.headOption
   }
 
   override def updateDoc(check: ThesisCheck): Unit = {

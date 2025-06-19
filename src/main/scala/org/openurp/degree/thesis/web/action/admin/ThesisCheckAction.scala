@@ -62,7 +62,7 @@ class ThesisCheckAction extends RestfulAction[ThesisCheck], ProjectSupport, Expo
 
     put("departs", getDeparts)
     val gQuery = OqlBuilder.from(classOf[GraduateSeason], "gg")
-    gQuery.orderBy("gg.graduateOn desc")
+    gQuery.orderBy("gg.graduateIn desc")
     put("seasons", entityDao.search(gQuery))
     forward()
   }
@@ -437,10 +437,10 @@ class ThesisCheckAction extends RestfulAction[ThesisCheck], ProjectSupport, Expo
       sheet.add("学士学位专业代码", "thesisCheck.degreeMajorCode").required()
       sheet.add("学士学位专业名称", "thesisCheck.degreeMajorName").required()
       sheet.add("证书专业名称", "thesisCheck.certMajorName").required()
-      sheet.add("入学年月", "thesisCheck.enrollOn").required()
+      sheet.add("入学年月", "thesisCheck.enrollIn").required()
       sheet.add("学号", "writer.std.code").required()
       sheet.add("考生号", "thesisCheck.examineeCode").required()
-      sheet.add("毕业年月", "thesisCheck.graduateOn").required()
+      sheet.add("毕业年月", "thesisCheck.graduateIn").required()
       sheet.add("是否主辅修学位", "thesisCheck.majorMinorDegree")
       sheet.add("是否双学士学位", "thesisCheck.dualDegree")
       sheet.add("是否联合学位", "thesisCheck.jointDegree")

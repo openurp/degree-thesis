@@ -74,7 +74,7 @@
           <td>${lstm.name}</td>
           <td>${lstm.researchField!}</td>
           <td>${lstm.depart.name}</td>
-          <td>${lstm.season.graduateOn?string("yyyy-MM")}</td>
+          <td>${lstm.season.graduateIn?string("yyyy-MM")}</td>
           <td><input type="checkbox" name="lstmId" value="${lstm.id}"></td>
         </tr>
       [/#list]

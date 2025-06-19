@@ -12,7 +12,7 @@
   [@b.textfield label="学士学位专业代码" name="thesisCheck.degreeMajorCode" value=thesisCheck.degreeMajorCode! /]
   [@b.textfield label="学士学位专业名称" name="thesisCheck.degreeMajorName" value=thesisCheck.degreeMajorName! /]
   [@b.textfield label="证书专业名称" name="thesisCheck.certMajorName" value=thesisCheck.certMajorName! /]
-  [@b.startend label="入学~毕业" format="yyyy-MM" start=thesisCheck.enrollOn! end=thesisCheck.graduateOn name="thesisCheck.enrollOn,thesisCheck.graduateOn"/]
+  [@b.startend label="入学~毕业" format="yyyy-MM" start=thesisCheck.enrollIn! end=thesisCheck.graduateIn name="thesisCheck.enrollIn,thesisCheck.graduateIn"/]
   [@b.radios label="是否主辅修学位"  name="thesisCheck.majorMinorDegree" value=thesisCheck.majorMinorDegree! items="1:common.yes,0:common.no" /]
   [@b.radios label="是否双学士学位"  name="thesisCheck.dualDegree" value=thesisCheck.dualDegree! items="1:common.yes,0:common.no" /]
   [@b.radios label="是否联合学位"  name="thesisCheck.jointDegree" value=thesisCheck.jointDegree! items="1:common.yes,0:common.no" /]

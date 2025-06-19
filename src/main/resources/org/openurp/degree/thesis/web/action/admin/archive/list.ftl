@@ -14,6 +14,8 @@
         "review.finalScore:论文分数,review.finalScoreText:论文成绩,"+
         "confirmed:导师审核,archived:学院审核,feedback:反馈意见",null,'fileName=归档信息'));
     bar.addItem("打包下载",action.multi("downloadArchives",null,null,"_blank"));
+    var m = bar.addMenu("高级..");
+    m.addItem("批量设置签字日期",action.method('batchUpdateForm'));
   [/@]
   [@b.row]
     [@b.boxcol/]

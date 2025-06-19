@@ -128,12 +128,12 @@ abstract class AbstractFileGenerator {
   protected def addDate(name: String, oi: Option[Instant], data: mutable.Map[String, String]): Unit = {
     data.put(name, "    年    月   日")
     oi foreach { i =>
-      val formatter = DateTimeFormatter.ofPattern("YYYY年 MM月 dd日")
+      val formatter = DateTimeFormatter.ofPattern("yyyy年 MM月 dd日")
       data.put(name, formatter.format(i.atZone(ZoneId.systemDefault())))
     }
   }
 
-  protected def addScore(name: String, value: Option[Int], data: mutable.Map[String, String]): Unit = {
+  protected def addScore(name: String, value: Option[Any], data: mutable.Map[String, String]): Unit = {
     value foreach { v => data.put(name, v.toString) }
   }
 

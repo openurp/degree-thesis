@@ -50,7 +50,7 @@ class CopyCheckAction extends RestfulAction[CopyCheck], ImportSupport[CopyCheck]
     put("departs", departs)
 
     val gQuery = OqlBuilder.from(classOf[GraduateSeason], "gg")
-    gQuery.orderBy("gg.graduateOn desc")
+    gQuery.orderBy("gg.graduateIn desc")
     put("seasons", entityDao.search(gQuery))
   }
 

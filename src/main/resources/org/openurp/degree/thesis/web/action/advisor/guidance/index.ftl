@@ -27,7 +27,7 @@
         [#list glist as g][#assign gmap=gmap+{g.stage.id+"_"+g.idx:g}/][/#list]
         [#list gmap?keys?sort as gkey]
         [#assign g= gmap[gkey]/]
-        <h7>${g.stage} 第${turnNames[g.idx]}次指导 ${g.updatedAt?string('YYYY-MM-dd HH:mm:ss')}</h7>
+        <h7>${g.stage} 第${turnNames[g.idx]}次指导 ${g.updatedAt?string('yyyy-MM-dd HH:mm:ss')}</h7>
         <p class="card-text"><pre>${g.contents}</pre></p>
         [/#list]
       </div>

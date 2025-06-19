@@ -18,6 +18,7 @@
 package org.openurp.degree.thesis.web.action.admin
 
 import org.beangle.commons.activation.MediaTypes
+import org.beangle.commons.collection.Collections
 import org.beangle.commons.file.zip.Zipper
 import org.beangle.commons.io.Files
 import org.beangle.commons.lang.Strings
@@ -25,17 +26,18 @@ import org.beangle.data.dao.OqlBuilder
 import org.beangle.doc.transfer.exporter.ExportContext
 import org.beangle.ems.app.EmsApp
 import org.beangle.webmvc.context.ActionContext
-import org.beangle.webmvc.view.{Stream, View}
 import org.beangle.webmvc.support.action.{ExportSupport, RestfulAction}
+import org.beangle.webmvc.view.{Stream, View}
 import org.openurp.base.model.Project
 import org.openurp.base.std.model.GraduateSeason
-import org.openurp.degree.thesis.model.{ThesisArchive, ThesisDoc, ThesisPaper, ThesisReview}
+import org.openurp.degree.thesis.model.*
 import org.openurp.degree.thesis.service.doc.ThesisPdfGenerator
 import org.openurp.degree.thesis.service.{SmsService, ThesisGradeSyncService}
 import org.openurp.degree.thesis.web.helper.{PaperDownloadHelper, ThesisArchivePropertyExtractor}
 import org.openurp.starter.web.support.ProjectSupport
 
 import java.io.File
+import java.time.ZoneId
 
 /** 归档资料查询
  */
@@ -49,7 +51,7 @@ class ArchiveAction extends RestfulAction[ThesisArchive], ProjectSupport, Export
 
     put("departs", getDeparts)
     val gQuery = OqlBuilder.from(classOf[GraduateSeason], "gg")
-    gQuery.orderBy("gg.graduateOn desc")
+    gQuery.orderBy("gg.graduateIn desc")
     put("seasons", entityDao.search(gQuery))
   }
 
@@ -201,6 +203,43 @@ class ArchiveAction extends RestfulAction[ThesisArchive], ProjectSupport, Export
       Files.travel(new File(docDir), f => f.delete())
       new File(docDir).delete()
     }
+  }
+
+  def batchUpdateForm(): View = {
+    val season = entityDao.get(classOf[GraduateSeason], getLongId("archive.writer.season"))
+    put("season", season)
+    forward()
+  }
+
+  def batchUpdateTime(): View = {
+    val season = entityDao.get(classOf[GraduateSeason], getLongId("archive.writer.season"))
+    var messages = Collections.newBuffer[String]
+    getDate("commitment.updatedAt") foreach { d =>
+      val updatedAt = d.atTime(0, 0, 0).atZone(ZoneId.systemDefault()).toInstant
+      val sql = s"update ${classOf[Commitment].getName} cm set cm.updatedAt=?1 where cm.writer.season.id=?2"
+      val cnt = entityDao.executeUpdate(sql, updatedAt, season.id)
+      messages += s"更新了任务书${cnt}条"
+    }
+    getDate("proposal.confirmAt") foreach { d =>
+      val confirmAt = d.atTime(0, 0, 0).atZone(ZoneId.systemDefault()).toInstant
+      val sql = s"update ${classOf[Proposal].getName} cm set cm.confirmAt=?1 where cm.writer.season.id=?2"
+      val cnt = entityDao.executeUpdate(sql, confirmAt, season.id)
+      messages += s"更新了开题报告${cnt}条"
+    }
+    getDate("thesisReview.advisorReviewAt") foreach { d =>
+      val advisorReviewAt = d.atTime(0, 0, 0).atZone(ZoneId.systemDefault()).toInstant
+      val sql = s"update ${classOf[ThesisReview].getName} cm set cm.advisorReviewAt=?1 where cm.writer.season.id=?2"
+      val cnt = entityDao.executeUpdate(sql, advisorReviewAt, season.id)
+      messages += s"更新了导师评分${cnt}条"
+    }
+    getDate("thesisReview.crossReviewAt") foreach { d =>
+      val crossReviewAt = d.atTime(0, 0, 0).atZone(ZoneId.systemDefault()).toInstant
+      val sql = s"update ${classOf[ThesisReview].getName} cm set cm.crossReviewAt=?1 where cm.writer.season.id=?2"
+      val cnt = entityDao.executeUpdate(sql, crossReviewAt, season.id)
+      messages += s"更新了交叉评阅${cnt}条"
+    }
+    val message = if (messages.isEmpty) "更新0条" else messages.mkString("|")
+    redirect("search", s"archive.writer.season.id=${season.id}", message)
   }
 
   override protected def configExport(context: ExportContext): Unit = {

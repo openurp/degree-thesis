@@ -40,7 +40,7 @@ class DefenseWriterAction extends RestfulAction[DefenseWriter], ExportSupport[De
     val departs = getDeparts
     put("departs", departs)
     val gQuery = OqlBuilder.from(classOf[GraduateSeason], "gg")
-    gQuery.orderBy("gg.graduateOn desc")
+    gQuery.orderBy("gg.graduateIn desc")
     put("seasons", entityDao.search(gQuery))
   }
 

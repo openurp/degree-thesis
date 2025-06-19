@@ -2,7 +2,11 @@ import org.openurp.parent.Dependencies.*
 import org.openurp.parent.Settings.*
 
 ThisBuild / organization := "org.openurp.degree.thesis"
+<<<<<<< HEAD
 ThisBuild / version := "0.0.5"
+=======
+ThisBuild / version := "0.0.7-SNAPSHOT"
+>>>>>>> develop
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -24,9 +28,10 @@ ThisBuild / description := "The OpenURP Thesis Webapp"
 ThisBuild / homepage := Some(url("http://openurp.github.io/thesis/index.html"))
 ThisBuild / resolvers += Resolver.mavenLocal
 
-val apiVer = "0.41.14"
-val starterVer = "0.3.50"
-val eduCoreVer = "0.3.7"
+val apiVer = "0.44.0"
+val starterVer = "0.3.58"
+val eduCoreVer = "0.3.11"
+
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVer
 val openurp_degree_api = "org.openurp.degree" % "openurp-degree-api" % apiVer
 val openurp_stater_web = "org.openurp.starter" % "openurp-starter-web" % starterVer
@@ -39,8 +44,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "openurp-degree-thesis-webapp",
     common,
-    libraryDependencies ++= Seq(beangle_ems_app,beangle_webmvc),
-    libraryDependencies ++= Seq(openurp_base_api, openurp_degree_api, openurp_stater_web,openurp_edu_core),
+    libraryDependencies ++= Seq(openurp_base_api, openurp_degree_api, openurp_stater_web, openurp_edu_core),
     libraryDependencies ++= Seq(itextpdf, itext_asian),
     libraryDependencies ++= Seq(beangle_doc_docx),
     libraryDependencies ++= Seq(logback_classic)
