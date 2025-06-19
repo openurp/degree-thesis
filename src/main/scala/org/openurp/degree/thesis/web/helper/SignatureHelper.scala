@@ -39,8 +39,8 @@ object SignatureHelper {
     val blob = EmsApp.getBlobRepository(true)
     try {
       var contents  = IOs.readString(blob.url(url).get.openStream())
-      contents = Strings.substringAfter(contents,";base64,")
-      Base64.decode(contents)
+        contents = Strings.substringAfter(contents,";base64,")
+        Base64.decode(contents)
     } catch
       case e: Exception => null
   }
