@@ -2,7 +2,7 @@ import org.openurp.parent.Dependencies.*
 import org.openurp.parent.Settings.*
 
 ThisBuild / organization := "org.openurp.degree.thesis"
-ThisBuild / version := "0.0.5"
+ThisBuild / version := "0.0.7"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -24,9 +24,9 @@ ThisBuild / description := "The OpenURP Thesis Webapp"
 ThisBuild / homepage := Some(url("http://openurp.github.io/thesis/index.html"))
 ThisBuild / resolvers += Resolver.mavenLocal
 
-val apiVer = "0.44.0"
-val starterVer = "0.3.58"
-val eduCoreVer = "0.3.11"
+val apiVer = "0.46.0"
+val starterVer = "0.4.0"
+val eduCoreVer = "0.3.16"
 
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVer
 val openurp_degree_api = "org.openurp.degree" % "openurp-degree-api" % apiVer
